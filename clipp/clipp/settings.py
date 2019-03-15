@@ -25,7 +25,7 @@ SECRET_KEY = 'mqq_!5c98suhid9g&tltpxwr9&g#oe2xua2hxo6lt^vfc87gdu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-quickstart95.herokuapp.com']
 
 
 # Application definition
@@ -82,10 +82,14 @@ WSGI_APPLICATION = 'clipp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
