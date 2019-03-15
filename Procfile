@@ -1,1 +1,1 @@
-web: gunicorn reviewer.wsgi
+web: gunicorn clipp.wsgi:application --log-file -
