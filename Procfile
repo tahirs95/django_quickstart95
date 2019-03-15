@@ -1,1 +1,1 @@
-web: gunicorn clipp.wsgi
+web: gunicorn reviewer.wsgi
