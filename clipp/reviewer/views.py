@@ -111,11 +111,11 @@ def payment_done(request):
 def payment_cancelled(request):
     return render(request, 'payment_cancelled.html')
 
-class CourseView(ListView):
-    template_name = 'class_based.html'
-    context_object_name = 'my_book_list'   # your own name for the list as a template variable
+# class CourseView(ListView):
+#     template_name = 'class_based.html'
+#     context_object_name = 'my_book_list'   # your own name for the list as a template variable
 
-    queryset = Course.objects.get(guid='99')
+#     queryset = Course.objects.get(guid='99')
 
 
 
