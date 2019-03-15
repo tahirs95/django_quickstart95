@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+{% for v in dict %}
+<a href = '{{ v.get_absolute_url }}'>{{v.guid}}</a>
+<!-- {{v.guid}} -->
+<!-- <li>{{v.title}}</li>
+<li>{{v.description}}</li>
+<li>{{v.status}}</li> -->
+<br>
+{% endfor %}
+</ul>
+{% endblock %}

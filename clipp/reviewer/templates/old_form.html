@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<form action='.' method='POST'> {% csrf_token %}
+    <input type = 'text' name = 'guid' placeholder="Type Course GUID">
+    <input type='submit' value='Save' />
+</form>
+
+
+{% endblock %}

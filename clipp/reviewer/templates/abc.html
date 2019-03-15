@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    {% if dict.name == "Django and Python" %}
+        {% for k,v in dict.items %}
+            <li>{{ k }}: {{ v|safe }}</li>
+        {% endfor %}
+    {% else %}
+    Name is not matched!
+    {% endif %}
+</ul>
+{% endblock %}
