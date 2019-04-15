@@ -15,16 +15,51 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.views import (
+    LoginView,
+    LogoutView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
+from django.urls import reverse_lazy
+
 from reviewer import views
 
 # app_name = 'reviewer'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('course/', include(('reviewer.urls', 'reviewer'), namespace='reviewer')),
-    path('api/', include("reviewer.api.urls")),
-    path('paypal/', include('paypal.standard.ipn.urls')),
-    path('process-payment/', views.payment, name='process_payment'),
-    path('payment-done/', views.payment_done, name='payment_done'),
-    path('payment-cancelled/', views.payment_cancelled, name='payment_cancelled'),
+    path('signup/', views.signup, name='signup'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('login/', LoginView.as_view(template_name='authentication/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('reviewer:home')), name='logout'),
+    path('password_change/',
+        PasswordChangeView.as_view(template_name='authentication/password_change_form.html'),
+        name='password_change'),
+    path('password_change/done/',
+        PasswordChangeDoneView.as_view(template_name='authentication/password_change_done.html'),
+        name='password_change_done'),
+    path('password_reset/',
+        PasswordResetView.as_view(template_name='authentication/password_reset_form.html',
+        email_template_name='authentication/password_reset_email.html',
+        subject_template_name='authentication/password_reset_subject.txt'), 
+        name='password_reset'),
+    path('password_reset/done/',
+        PasswordResetDoneView.as_view(template_name='authentication/password_reset_done.html'),
+        name='password_reset_done'),
+    path('reset/reset/<uidb64>/<token>/',
+        PasswordResetConfirmView.as_view(template_name='authentication/password_reset_confirm.html'),
+        name='password_reset_confirm'),
+    path('reset/done/',
+        PasswordResetCompleteView.as_view(template_name='authentication/password_reset_complete.html'),
+        name='password_reset_complete'),
+    path('secret/', views.secret_page, name='secret'),
+        path('secret2/', views.SecretPage.as_view(), name='secret2'),
+        
 ]
 

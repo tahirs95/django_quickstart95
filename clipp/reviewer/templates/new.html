@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div>
+        Welcome {% if user.is_authenticated %} {{user.username}} {% else %} Visitor {% endif %}!
+</div>
+<br>
+
 <ul>
 {% for v in dict %}
-<a href = '{{ v.get_absolute_url }}'>{{v.guid}}</a>
+<a class="courses" href = '{{ v.get_absolute_url }}'>{{v.guid}}</a>
 <!-- {{v.guid}} -->
 <!-- <li>{{v.title}}</li>
 <li>{{v.description}}</li>

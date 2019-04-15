@@ -25,7 +25,7 @@ SECRET_KEY = 'mqq_!5c98suhid9g&tltpxwr9&g#oe2xua2hxo6lt^vfc87gdu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-quick95.herokuapp.com']
 
 
 # Application definition
@@ -40,16 +40,15 @@ INSTALLED_APPS = [
     'reviewer',
     'rest_framework',
     'paypal.standard.ipn',  
-    'crispy_forms',
 ]
 
 PAYPAL_RECEIVER_EMAIL = 'tahirs95@hotmail.com'
  
 PAYPAL_TEST = True
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,8 +74,7 @@ TEMPLATES = [
         },
     },
 ]
-
-# print(os.path.join(BASE_DIR, "templates"))
+print(os.path.join(BASE_DIR, "templates"))
 WSGI_APPLICATION = 'clipp.wsgi.application'
 
 
@@ -85,14 +83,14 @@ WSGI_APPLICATION = 'clipp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
-# import dj_database_url
-# db_from_env = dj_database_url.config()
-# DATABASES['default'].update(db_from_env)
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -127,20 +125,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = 'reviewer:home'
-LOGOUT_REDIRECT_URL = 'reviewer:home'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
   
 # Static files (CSS, JavaScript, Images) 
-# https://docs.djangoproject.com/en/1.9/howto/static-files/ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles') 
+# https://docs.djangoproject.com/en/1.9/howto/static-files/ 
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles') 
 STATIC_URL = '/static/'  
+
 # Extra places for collectstatic to find static files. 
-# STATICFILES_DIRS = (
-#      os.path.join(PROJECT_ROOT, 'static'),
-#  )
+STATICFILES_DIRS = (
+     os.path.join(PROJECT_ROOT, 'static'),
+ )
 
-# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Course
 
 class CourseForm(forms.ModelForm):
@@ -14,7 +15,6 @@ class CourseForm(forms.ModelForm):
             return title
         else:
             raise forms.ValidationError("Not a valid title.")
-
 
 class RawForm(forms.Form):
     guid = forms.CharField()

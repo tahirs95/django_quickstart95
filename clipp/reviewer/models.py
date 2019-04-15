@@ -13,4 +13,4 @@ class Course(models.Model):
 
     def get_absolute_url(self):
         # return f"/course/list/{self.guid}/"
-        return reverse("reviewer:course-detail", kwargs={"guid":self.guid})
+        return reverse("reviewer:course_detail", kwargs={"guid":self.guid})

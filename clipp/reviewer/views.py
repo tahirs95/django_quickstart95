@@ -1,19 +1,22 @@
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Course
-from .forms import CourseForm
 from django.template import RequestContext
 from django.urls import reverse
 from django.http import Http404
-
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.conf import settings
-from decimal import Decimal
-from paypal.standard.forms import PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import(
     ListView
 )
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import Course
+from .forms import CourseForm
 
 # Create your views here.
 
@@ -26,7 +29,6 @@ def home(request ,*args, **kwargs):
 def course(request, *args, **kwargs):
     obj = Course.objects.all()
     return render(request, "new.html", {'dict':obj})
-
 
 def createForm(request, *args, **kwargs):
     form = CourseForm(request.POST or None)
@@ -68,7 +70,6 @@ def delete(request, guid):
     # print(context["object"].title)
     return render(request, "delete.html", context)
 
-
     # a = get_object_or_404(Course, guid=guid)
     # try:
     #     a = Course.objects.filter(guid=guid)
@@ -81,35 +82,6 @@ def delete(request, guid):
     # return HttpResponse("Object deleted") 
     # return HttpResponseRedirect('https://google.com')  # "protocol relative" URL
 
-def payment(request):
-    paypal_dict = {
-                    'business': 'tahirs95@hotmail.com',
-                    "a3": 18.99,                      # monthly price
-                    "p3": 1,                           # duration of each unit (depends on unit)
-                    "t3": "D",                         # duration unit ("M for Month")
-                    "src": "1",                        # make payments recur
-                    "sra": "1",                        # reattempt payment on payment error
-                    'item_name': "Django_Plan",
-                    'invoice': 'abcd1223', # it should be unique
-                    'currency_code': 'USD',
-                    'notify_url': request.build_absolute_uri(reverse('paypal-ipn')),
-                    'return_url': request.build_absolute_uri(reverse('payment_done')),
-                    'cancel_return': request.build_absolute_uri(reverse('payment_cancelled')),
-                    'rm': 2,
-                }
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    context = {"form": form}
-    print(context)
-    return render(request, "payment.html", context)
-
-@csrf_exempt
-def payment_done(request):
-    return render(request, 'payment_done.html')
- 
- 
-@csrf_exempt
-def payment_cancelled(request):
-    return render(request, 'payment_cancelled.html')
 
 # class CourseView(ListView):
 #     template_name = 'class_based.html'
@@ -117,6 +89,23 @@ def payment_cancelled(request):
 
 #     queryset = Course.objects.get(guid='99')
 
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/course/')
+    else:
+        form = UserCreationForm()
+    return render(request, 'authentication/signup.html', {
+        'form':form
+    })
 
+@login_required(login_url='login')
+def secret_page(request):
+    return render(request, 'secret_page.html')
 
+class SecretPage(LoginRequiredMixin, TemplateView):
+    login_url = 'login'
+    template_name = 'secret_page.html'
 
